@@ -48,8 +48,11 @@ check_password_pwned () {
 
     local RESPONSE=$(curl -s "https://api.pwnedpasswords.com/range/$PREFIX")
 
-    if echo "$RESPONSE" | grep -q "$SUFFIX"; then
-        echo "Das Passwort wurde bereits kompromittiert."
+    local MATCH=$(echo "$RESPONSE" | grep -i "$SUFFIX")
+    if [[ -n $MATCH ]]; then
+        local COUNT=$(echo $MATCH | cut -d ':' -f 2 | tr -d '[:space:]')
+        echo "Oh no — pwned!"
+        echo "This password has been seen $COUNT times before and should never be used."
     else
         echo "Das Passwort ist sicher."
     fi
