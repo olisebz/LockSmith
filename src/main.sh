@@ -43,7 +43,7 @@ generate_password () {
         # Überprüfen, ob der Hash des Passworts bereits existiert
         local HASH=$(echo -n $PASSWORD | shasum -a 256 | awk '{ print $1 }')
         if grep -q $HASH $HASH_FILE; then
-            echo "Password already generated. Generating a new one..."
+            return 1
         else
             # Hash in die Datei schreiben
             echo $HASH >> $HASH_FILE
@@ -51,6 +51,7 @@ generate_password () {
         fi
     done
     echo $PASSWORD
+    return 0
 }
 
 # Hauptskript
@@ -71,7 +72,15 @@ while true; do
     fi
 done
 
-PASSWORD=$(generate_password $TYPE)
+while true; do
+    PASSWORD=$(generate_password $TYPE)
+    if [ $? -eq 0 ]; then
+        break
+    else
+        echo "Generated password already used. Please generate a new one..."
+    fi
+done
+
 LENGTH=${#PASSWORD}
 
 echo "The total length of the password is: $LENGTH"
