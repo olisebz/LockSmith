@@ -1,36 +1,56 @@
 #!/bin/bash
 
-# Function to display menu
-display_menu() {
-    echo "Please choose the type of password you want to generate:"
-    echo "1) Simple Password"
-    echo "2) Complex Password"
-    echo "Enter your choice (1 or 2):"
+# Funktion zur Überprüfung des Passworts mit HIBP API
+check_password_pwned () {
+    local PASSWORD=$1
+    local SHA1=$(echo -n $PASSWORD | sha1sum | awk '{ print $1 }' | tr '[:lower:]' '[:upper:]')
+    local PREFIX=${SHA1:0:5}
+    local SUFFIX=${SHA1:5}
+
+    local RESPONSE=$(curl -s "https://api.pwnedpasswords.com/range/$PREFIX")
+
+    local MATCH=$(echo "$RESPONSE" | grep -i "$SUFFIX")
+    if [[ -n $MATCH ]]; then
+        local COUNT=$(echo $MATCH | cut -d ':' -f 2 | tr -d '[:space:]')
+        echo "Oh no — pwned!"
+        echo "This password has been seen $COUNT times before and should never be used."
+    else
+        echo "The generated password is safe."
+    fi
 }
 
-# Read user input
-read_choice() {
-    local choice
-    read -r choice
-    case $choice in
-        1)
-            ./simplePass.sh
-            ;;
-        2)
-            ./complexPass.sh
-            ;;
-        *)
-            echo "Invalid choice. Please enter 1 or 2."
-            display_menu
-            read_choice
-            ;;
-    esac
+# Funktion zum Generieren eines Passworts
+generate_password () {
+    local PASSWORD
+    if [ "$1" == "simple" ]; then
+        PASSWORD=$(./simplePass.sh)
+    elif [ "$1" == "complex" ]; then
+        PASSWORD=$(./complexPass.sh)
+    else
+        echo "Invalid choice"
+        exit 1
+    fi
+    echo $PASSWORD
 }
 
-# Main function
-main() {
-    display_menu
-    read_choice
-}
+# Hauptskript
+echo "Please choose the type of your password:"
+echo "1) simple password"
+echo "2) complex password"
+read -p "Choose (1 or 2): " CHOICE
 
-main
+if [ "$CHOICE" == "1" ]; then
+    TYPE="simple"
+elif [ "$CHOICE" == "2" ]; then
+    TYPE="complex"
+else
+    echo "invalid choice "
+    exit 1
+fi
+
+PASSWORD=$(generate_password $TYPE)
+LENGTH=${#PASSWORD}
+
+echo "Your generated password is: $PASSWORD"
+echo "The total length of the password is: $LENGTH"
+check_password_pwned $PASSWORD
