@@ -1,9 +1,17 @@
 #!/bin/bash
 
+# Datei, die die Hashes der generierten Passwörter speichert
+HASH_FILE="hashes.txt"
+
+# Erstelle die Datei, falls sie nicht existiert
+if [[ ! -f $HASH_FILE ]]; then
+    touch $HASH_FILE
+fi
+
 # Funktion zur Überprüfung des Passworts mit HIBP API
 check_password_pwned () {
     local PASSWORD=$1
-    local SHA1=$(echo -n $PASSWORD | sha1sum | awk '{ print $1 }' | tr '[:lower:]' '[:upper:]')
+    local SHA1=$(echo -n $PASSWORD | shasum -a 1 | awk '{ print $1 }' | tr '[:lower:]' '[:upper:]')
     local PREFIX=${SHA1:0:5}
     local SUFFIX=${SHA1:5}
 
@@ -22,14 +30,26 @@ check_password_pwned () {
 # Funktion zum Generieren eines Passworts
 generate_password () {
     local PASSWORD
-    if [ "$1" == "simple" ]; then
-        PASSWORD=$(./simplePass.sh)
-    elif [ "$1" == "complex" ]; then
-        PASSWORD=$(./complexPass.sh)
-    else
-        echo "Invalid choice"
-        exit 1
-    fi
+    while true; do
+        if [ "$1" == "simple" ]; then
+            PASSWORD=$(./simplePass.sh)
+        elif [ "$1" == "complex" ]; then
+            PASSWORD=$(./complexPass.sh)
+        else
+            echo "Invalid choice"
+            exit 1
+        fi
+
+        # Überprüfen, ob der Hash des Passworts bereits existiert
+        local HASH=$(echo -n $PASSWORD | shasum -a 256 | awk '{ print $1 }')
+        if grep -q $HASH $HASH_FILE; then
+            echo "Password already generated. Generating a new one..."
+        else
+            # Hash in die Datei schreiben
+            echo $HASH >> $HASH_FILE
+            break
+        fi
+    done
     echo $PASSWORD
 }
 
