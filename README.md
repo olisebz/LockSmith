@@ -50,5 +50,3 @@ Ensure you have the following installed on your system:
 
 - olisebz
 - ymeichtry
-
-![image](password.gif)
