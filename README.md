@@ -1,6 +1,6 @@
 # LockSmith
 
-# Password Generators
+## Password Generators
 
 This repository contains two password generator scripts:
 
@@ -28,3 +28,27 @@ Ensure you have the following installed on your system:
 2. Make the script executable:
    ```bash
    chmod +x simplePass.sh
+   ```
+3. Run the script:
+   ```bash
+   ./simplePass.sh
+   ```
+
+### main.sh
+
+1. Make the script executable:
+   ```bash
+   chmod +x main.sh
+   ```
+2. Run the script:
+   ```bash
+   ./main.sh
+   ```
+3. Follow the prompts to specify the criteria for your password (number of uppercase letters, lowercase letters, numbers, and symbols).
+
+## Contributors
+
+- olisebz
+- ymeichtry
+
+![image](password.gif)
