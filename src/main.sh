@@ -34,23 +34,26 @@ generate_password () {
 }
 
 # Hauptskript
-echo "Please choose the type of your password:"
-echo "1) simple password"
-echo "2) complex password"
-read -p "Choose (1 or 2): " CHOICE
+while true; do
+    echo "Please choose the type of your password:"
+    echo "1) simple password"
+    echo "2) complex password"
+    read -p "Choose (1 or 2): " CHOICE
 
-if [ "$CHOICE" == "1" ]; then
-    TYPE="simple"
-elif [ "$CHOICE" == "2" ]; then
-    TYPE="complex"
-else
-    echo "invalid choice "
-    exit 1
-fi
+    if [ "$CHOICE" == "1" ]; then
+        TYPE="simple"
+        break
+    elif [ "$CHOICE" == "2" ]; then
+        TYPE="complex"
+        break
+    else
+        echo "Invalid choice. Please try again."
+    fi
+done
 
 PASSWORD=$(generate_password $TYPE)
 LENGTH=${#PASSWORD}
 
-echo "Your generated password is: $PASSWORD"
 echo "The total length of the password is: $LENGTH"
+echo "Your generated password is: $PASSWORD"
 check_password_pwned $PASSWORD
