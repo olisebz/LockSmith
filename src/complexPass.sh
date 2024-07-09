@@ -39,35 +39,13 @@ generate_password () {
     echo $PASSWORD
 }
 
-# Funktion zur Überprüfung des Passworts mit HIBP API
-check_password_pwned () {
-    local PASSWORD=$1
-    local SHA1=$(echo -n $PASSWORD | sha1sum | awk '{ print $1 }' | tr '[:lower:]' '[:upper:]')
-    local PREFIX=${SHA1:0:5}
-    local SUFFIX=${SHA1:5}
-
-    local RESPONSE=$(curl -s "https://api.pwnedpasswords.com/range/$PREFIX")
-
-    local MATCH=$(echo "$RESPONSE" | grep -i "$SUFFIX")
-    if [[ -n $MATCH ]]; then
-        local COUNT=$(echo $MATCH | cut -d ':' -f 2 | tr -d '[:space:]')
-        echo "Oh no — pwned!"
-        echo "This password has been seen $COUNT times before and should never be used."
-    else
-        echo "Das Passwort ist sicher."
-    fi
-}
-
-# Hauptskript
-read -p "Bitte geben Sie die Anzahl der großen Buchstaben ein: " NUM_UPPER
-read -p "Bitte geben Sie die Anzahl der kleinen Buchstaben ein: " NUM_LOWER
-read -p "Bitte geben Sie die Anzahl der Zahlen ein: " NUM_NUMBERS
-read -p "Bitte geben Sie die Anzahl der Symbole ein: " NUM_SYMBOLS
-
-LENGTH=$((NUM_UPPER + NUM_LOWER + NUM_NUMBERS + NUM_SYMBOLS))
-echo "Die Gesamtlänge des Passworts beträgt: $LENGTH"
+# Hauptskript für komplexes Passwort
+read -p "Please enter the number of capital letters: " NUM_UPPER
+read -p "Please enter the number of small letters: " NUM_LOWER
+read -p "Please enter the number of numbers: " NUM_NUMBERS
+read -p "Please enter the number of symbols: " NUM_SYMBOLS
 
 PASSWORD=$(generate_password $NUM_UPPER $NUM_LOWER $NUM_NUMBERS $NUM_SYMBOLS)
 
-echo "Ihr generiertes Passwort lautet: $PASSWORD"
-check_password_pwned $PASSWORD
+# Echo the password back to main.sh
+echo $PASSWORD

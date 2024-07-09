@@ -21,6 +21,5 @@ generate_password() {
     echo $PASSWORD
 }
 
-# Print the generated password
-PASSWORD=$(generate_password)
-echo "Generated Password: $PASSWORD"
+# Generate and return the password
+generate_password
