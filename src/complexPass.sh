@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Funktion zum Generieren eines zufälligen Passworts
+# function to generate a password
 generate_password () {
     local NUM_UPPER="$1"
     local NUM_LOWER="$2"

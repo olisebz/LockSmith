@@ -6,7 +6,7 @@ if [[ ! -f "$HASH_FILE" ]]; then
     touch "$HASH_FILE"
 fi
 
-# Funktion zur Überprüfung des Passworts mit HIBP API
+# function to check if the password has been pwned
 check_password_pwned () {
     local PASSWORD="$1"
     local SHA1
@@ -29,7 +29,7 @@ check_password_pwned () {
     fi
 }
 
-# Funktion zum Generieren eines Passworts
+# function to generate a password
 generate_password () {
     local PASSWORD
     while true; do
@@ -55,7 +55,7 @@ generate_password () {
     return 0
 }
 
-# Hauptskript
+# Main script
 while true; do
     echo "Please choose the type of your password:"
     echo "1) simple password"

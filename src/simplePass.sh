@@ -5,14 +5,14 @@ if [[ ! -f words.txt ]]; then
     exit 1
 fi
 
-# Function to get a random word from words.txt
+# function to get a random word
 get_random_word() {
     local WORD
     WORD=$(sort -R words.txt | head -n 1)
     echo "$WORD"
 }
 
-# Function to generate a password
+# function to generate a password
 generate_password() {
     local WORD1
     WORD1=$(get_random_word)
