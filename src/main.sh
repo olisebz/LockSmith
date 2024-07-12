@@ -74,8 +74,7 @@ while true; do
 done
 
 while true; do
-    PASSWORD=$(generate_password "$TYPE")
-    if generate_password "$TYPE"; then
+    if PASSWORD=$(generate_password "$TYPE"); then
         break
     else
         echo "Generated password already used. Please generate a new one..."
