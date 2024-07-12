@@ -1,25 +1,26 @@
 #!/bin/bash
 
-# Check if words.txt exists
 if [[ ! -f words.txt ]]; then
     echo "words.txt not found!"
     exit 1
 fi
 
-# Function to get a random word from words.txt
+# function to get a random word
 get_random_word() {
-    local WORD=$(sort -R words.txt | head -n 1)
-    echo $WORD
+    local WORD
+    WORD=$(sort -R words.txt | head -n 1)
+    echo "$WORD"
 }
 
-# Generate the password
+# function to generate a password
 generate_password() {
-    local WORD1=$(get_random_word)
-    local WORD2=$(get_random_word)
-    local NUMBER=$((10 + RANDOM % 90))  # Generate a random two-digit number
+    local WORD1
+    WORD1=$(get_random_word)
+    local WORD2
+    WORD2=$(get_random_word)
+    local NUMBER=$((10 + RANDOM % 90)) 
     local PASSWORD="${WORD1}${WORD2}${NUMBER}"
-    echo $PASSWORD
+    echo "$PASSWORD"
 }
 
-# Generate and return the password
 generate_password
