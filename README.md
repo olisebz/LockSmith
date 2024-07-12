@@ -50,3 +50,42 @@ Ensure you have the following installed on your system:
 
 - olisebz
 - ymeichtry
+
+## Bash Testing (BATS)
+
+### Installation
+
+1. clone BATS
+   ```bash
+   git clone https://github.com/bats-core/bats-core.git
+   ```
+2. go into the new folder
+   ```bash
+   cd bats-core
+   ```
+3. install the dependencies
+   ```bash
+   ./install.sh /usr/local
+   ```
+
+### Usage guide
+
+1. go to tests folder
+   ```bash
+   cd tests
+   ```
+
+2. test main.sh
+   ```bash
+   bats main.bats
+   ```
+
+3. test complexPass.sh
+   ```bash
+   bats complexPass.bats
+   ```
+
+4. test simplePass.sh
+   ```bash
+   bats simplePass.bats
+   ```

@@ -1,2 +1,3 @@
 # add hashes.txt into .gitignore because of password security 
 src/hashes.txt
+tests/hashes.txt
