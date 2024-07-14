@@ -37,6 +37,8 @@ generate_password () {
             PASSWORD=$(./simplePass.sh)
         elif [ "$1" == "complex" ]; then
             PASSWORD=$(./complexPass.sh)
+        elif [ "$1" == "horse_staple" ]; then
+            PASSWORD=$(./horseStaplePass.sh "$2")
         else
             echo "Invalid choice"
             exit 1
@@ -60,7 +62,8 @@ while true; do
     echo "Please choose the type of your password:"
     echo "1) simple password"
     echo "2) complex password"
-    read -r -p "Choose (1 or 2): " CHOICE 
+    echo "3) horse staple password"
+    read -r -p "Choose (1, 2 or 3): " CHOICE 
 
     if [ "$CHOICE" == "1" ]; then
         TYPE="simple"
@@ -68,13 +71,17 @@ while true; do
     elif [ "$CHOICE" == "2" ]; then
         TYPE="complex"
         break
+    elif [ "$CHOICE" == "3" ]; then
+        TYPE="horse_staple"
+        read -r -p "Enter the number of words for the horse staple password: " NUM_WORDS
+        break
     else
         echo "Invalid choice. Please try again."
     fi
 done
 
 while true; do
-    if PASSWORD=$(generate_password "$TYPE"); then
+    if PASSWORD=$(generate_password "$TYPE" "$NUM_WORDS"); then
         break
     else
         echo "Generated password already used. Please generate a new one..."
