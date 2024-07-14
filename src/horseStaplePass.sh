@@ -11,3 +11,22 @@ get_random_word() {
     WORD=$(sort -R words.txt | head -n 1)
     echo "$WORD"
 }
+
+# function to generate a horse staple password
+generate_horse_staple_password() {
+    local NUM_WORDS="$1"
+    local PASSWORD=""
+
+    for (( i=0; i<NUM_WORDS; i++ )); do
+        WORD=$(get_random_word)
+        if [ "$i" -eq 0 ]; then
+            PASSWORD="$WORD"
+        else
+            PASSWORD="$PASSWORD-$WORD"
+        fi
+    done
+
+    echo "$PASSWORD"
+}
+
+generate_horse_staple_password "$1"
