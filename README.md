@@ -2,12 +2,11 @@
 
 ## Password Generators
 
-This repository contains password generator scripts:
+This repository contains various password generator scripts:
 
 1. `simplePass.sh`: Generates a password using two random words from a provided list and appending a two-digit number at the end.
-2. `complexPass.sh`: Generates a complex password based on specified criteria for uppercase letters, lowercase letters, numbers, and symbols.
-3. `horseStaplePass.sh`: Generates a password composed of a specified number of random words separated by hyphens.
-4. `main.sh`: Main script to choose and generate passwords using the above scripts.
+2. `complexPass.sh`: Generates a password based on user-specified criteria for uppercase letters, lowercase letters, numbers, and symbols.
+3. `horseStaplePass.sh`: Generates a password consisting of a specified number of words from a provided list, separated by hyphens.
 
 ## Prerequisites
 
@@ -15,13 +14,14 @@ Ensure you have the following installed on your system:
 
 - Bash shell
 - Coreutils (for `sort` command)
+- `curl` (for checking if the password has been pwned)
 
 ## Files
 
 - `simplePass.sh`: The script that generates a password using two random words and a two-digit number.
-- `complexPass.sh`: The script that generates a complex password based on specified criteria.
-- `horseStaplePass.sh`: The script that generates a password composed of a specified number of random words separated by hyphens.
-- `main.sh`: The main script to choose and generate passwords using the above scripts.
+- `complexPass.sh`: The script that generates a password based on specified criteria.
+- `horseStaplePass.sh`: The script that generates a password consisting of a specified number of words separated by hyphens.
+- `main.sh`: The script that allows the user to choose between generating a simple or complex password.
 - `words.txt`: A text file containing a list of words, each on a new line (used by `simplePass.sh` and `horseStaplePass.sh`).
 
 ## Usage
@@ -48,7 +48,7 @@ Ensure you have the following installed on your system:
    ```bash
    ./complexPass.sh
    ```
-3. Follow the prompts to specify the number of uppercase letters, lowercase letters, numbers, and symbols.
+3. Follow the prompts to specify the criteria for your password (number of uppercase letters, lowercase letters, numbers, and symbols).
 
 ### horseStaplePass.sh
 
@@ -57,9 +57,13 @@ Ensure you have the following installed on your system:
    ```bash
    chmod +x horseStaplePass.sh
    ```
-3. Run the script with the number of words you want in the password:
+3. Run the script with the number of words as an argument:
    ```bash
    ./horseStaplePass.sh <number_of_words>
+   ```
+4. Example:
+   ```bash
+   ./horseStaplePass.sh 4
    ```
 
 ### main.sh
@@ -72,12 +76,7 @@ Ensure you have the following installed on your system:
    ```bash
    ./main.sh
    ```
-3. Follow the prompts to specify the type of password (simple, complex, or horse staple) and the criteria if applicable.
-
-## Contributors
-
-- olisebz
-- ymeichtry
+3. Follow the prompts to choose between generating a simple or complex password.
 
 ## Bash Testing (BATS)
 
@@ -96,9 +95,9 @@ Ensure you have the following installed on your system:
    ./install.sh /usr/local
    ```
 
-### Usage guide
+### Running Tests
 
-1. Go to the tests folder:
+1. Go to the `tests` folder:
    ```bash
    cd tests
    ```
@@ -122,3 +121,9 @@ Ensure you have the following installed on your system:
    ```bash
    bats horseStaplePass.bats
    ```
+
+## Contributors
+
+- olisebz
+- ymeichtry
+```
