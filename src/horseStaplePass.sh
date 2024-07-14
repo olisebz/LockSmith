@@ -30,7 +30,7 @@ generate_horse_staple_password() {
     echo "$PASSWORD"
 }
 
-# check pwned
+# Function to check if the password has been pwned
 check_password_pwned () {
     local PASSWORD="$1"
     local SHA1
@@ -52,3 +52,15 @@ check_password_pwned () {
         echo "The generated password is safe."
     fi
 }
+
+# Main script
+if [[ -z "$1" ]]; then
+    echo "Usage: $0 <number_of_words>"
+    exit 1
+fi
+
+NUM_WORDS="$1"
+PASSWORD=$(generate_horse_staple_password "$NUM_WORDS")
+
+echo "Your generated horse-staple password is: $PASSWORD"
+check_password_pwned "$PASSWORD"
