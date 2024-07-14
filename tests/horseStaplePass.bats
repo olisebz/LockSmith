@@ -17,13 +17,17 @@ HORSE_STAPLE_PASS_SCRIPT="../src/horseStaplePass.sh"
 
     run bash -c "$HORSE_STAPLE_PASS_SCRIPT 4"
     [ "$status" -eq 0 ]
-    [ "$(echo "$output" | grep -o '-' | wc -l)" -eq 3 ]
+    PASSWORD_LINE=$(echo "$output" | grep "Your generated horse-staple password is:" | cut -d: -f2 | tr -d ' ')
+    [ "$(echo "$PASSWORD_LINE" | grep -o '-' | wc -l)" -eq 3 ]
 
-    # Check -
-    for word in $(echo "$output" | tr '-' ' '); do
+    # Check that each part is a word from the words.txt file
+    for word in $(echo "$PASSWORD_LINE" | grep -Eo '[^-]+'); do
         grep -qx "$word" words.txt
         [ $? -eq 0 ]
     done
+
+    # Check the output for pwned password message
+    echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"
 }
 
 # Test gen with 6 words
@@ -33,11 +37,15 @@ HORSE_STAPLE_PASS_SCRIPT="../src/horseStaplePass.sh"
 
     run bash -c "$HORSE_STAPLE_PASS_SCRIPT 6"
     [ "$status" -eq 0 ]
-    [ "$(echo "$output" | grep -o '-' | wc -l)" -eq 5 ]
+    PASSWORD_LINE=$(echo "$output" | grep "Your generated horse-staple password is:" | cut -d: -f2 | tr -d ' ')
+    [ "$(echo "$PASSWORD_LINE" | grep -o '-' | wc -l)" -eq 5 ]
 
     # Check -
-    for word in $(echo "$output" | tr '-' ' '); do
+    for word in $(echo "$PASSWORD_LINE" | grep -Eo '[^-]+'); do
         grep -qx "$word" words.txt
         [ $? -eq 0 ]
     done
+
+    # Check the output for pwned password message
+    echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"
 }
