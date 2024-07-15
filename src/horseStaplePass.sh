@@ -63,4 +63,3 @@ NUM_WORDS="$1"
 PASSWORD=$(generate_horse_staple_password "$NUM_WORDS")
 
 echo "Your generated horse-staple password is: $PASSWORD"
-check_password_pwned "$PASSWORD"
