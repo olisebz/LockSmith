@@ -22,12 +22,17 @@ HORSE_STAPLE_PASS_SCRIPT="../src/horseStaplePass.sh"
 
     # Check that each part is a word from the words.txt file
     for word in $(echo "$PASSWORD_LINE" | grep -Eo '[^-]+'); do
-        grep -qx "$word" words.txt
-        [ $? -eq 0 ]
+        if ! grep -qx "$word" words.txt; then
+            echo "Word $word not found in words.txt"
+            exit 1
+        fi
     done
 
     # Check the output for pwned password message
-    echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"
+    if ! echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"; then
+        echo "Pwned password message not found in output"
+        exit 2
+    fi
 }
 
 # Test gen with 6 words
@@ -40,12 +45,17 @@ HORSE_STAPLE_PASS_SCRIPT="../src/horseStaplePass.sh"
     PASSWORD_LINE=$(echo "$output" | grep "Your generated horse-staple password is:" | cut -d: -f2 | tr -d ' ')
     [ "$(echo "$PASSWORD_LINE" | grep -o '-' | wc -l)" -eq 5 ]
 
-    # Check -
+    # Check that each part is a word from the words.txt file
     for word in $(echo "$PASSWORD_LINE" | grep -Eo '[^-]+'); do
-        grep -qx "$word" words.txt
-        [ $? -eq 0 ]
+        if ! grep -qx "$word" words.txt; then
+            echo "Word $word not found in words.txt"
+            exit 1
+        fi
     done
 
     # Check the output for pwned password message
-    echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"
+    if ! echo "$output" | grep -qE "The generated password is safe|Oh no — pwned!"; then
+        echo "Pwned password message not found in output"
+        exit 2
+    fi
 }
